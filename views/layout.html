@@ -7,7 +7,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Sticky Footer Navbar Template for Bootstrap</title>
+    <title>Twitter</title>
 
     <!-- Bootstrap core CSS -->
     <link href="http://netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css" rel="stylesheet">
@@ -63,7 +63,7 @@
       <div class="container">
         {% block content %}Welcome to Twitter.js{% endblock %}
       </div> <!-- end container -->
-      
+
     </div>
 
     <div id="footer">
@@ -78,5 +78,28 @@
     <!-- Placed at the end of the document so the pages load faster -->
     <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
     <script src="http://netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+      // Load the socket.io library above, then connect to the server.
+      // Because the socket.io server is being run on the same server as your
+      // Express instance, you can connect() without any arguments.
+      var socket = io.connect();
+      socket.on('connect', function(){
+        console.log('connected to server via WebSockets!');
+      });
+      // When 'new_tweet' events are fired, do something with the packaged tweet
+      socket.on('newTweet', function (tweet) {
+        document.querySelector('#feed').insertAdjacentHTML('beforeend', `
+          <div class=tweetbox>
+            <img />
+              <div class="content">
+                <a  href="/users/${tweet.name}" class="by">${tweet.name}</a>
+                <p><a href="/tweets/${tweet.id}">${tweet.content}</a></p>
+              </div>
+          </div>
+          `);
+        // some logic to add the new tweet to the DOM…
+      });
+    </script>
   </body>
 </html>
